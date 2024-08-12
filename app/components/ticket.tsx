@@ -1,17 +1,10 @@
 "use client";
 
-import {Dispatch, SetStateAction, useRef} from "react";
+import {useRef} from "react";
 import {Data} from "../api/tickets/route";
+import {useDragAndDropStore} from "../store";
 
-const Ticket = ({
-  ticket,
-  cellId,
-  setSourceCell,
-}: {
-  ticket?: Data;
-  cellId: string;
-  setSourceCell?: Dispatch<SetStateAction<string>>;
-}) => {
+const Ticket = ({ticket, cellId}: {ticket?: Data; cellId: string}) => {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const toggleDialog = () => {
     dialogRef.current?.hasAttribute("open")
@@ -20,6 +13,8 @@ const Ticket = ({
   };
 
   const summaryText = ticket?.summary;
+
+  const {setSourceCellId, setTargetTicketId} = useDragAndDropStore();
   return (
     <>
       {!ticket ? (
@@ -29,18 +24,11 @@ const Ticket = ({
           id={String(ticket.id)}
           className="rounded-lg border border-black bg-white p-2 shadow-lg hover:bg-sky-300"
           onDragStart={(e: React.DragEvent<HTMLDivElement>) => {
-            setSourceCell?.(cellId);
-            e.dataTransfer.setData(
-              "ticketMove",
-              JSON.stringify({
-                targetTicketId: e.currentTarget.id,
-                sourceCellId: cellId,
-              })
-            );
+            setSourceCellId?.(cellId);
+            setTargetTicketId?.(e.currentTarget.id);
           }}
           draggable={true}
         >
-          {cellId}
           <dialog
             className="h-1/2 w-1/2 rounded-lg border-2 border-black p-2"
             ref={dialogRef}
@@ -60,12 +48,12 @@ const Ticket = ({
               dialogRef.current?.showModal();
             }}
           >
-            {/* <span>{ticket.title}</span>
+            <span>{ticket.title}</span>
             <span>
               {summaryText!.length > 40
                 ? `${summaryText?.substring(0, 40)}...`
                 : summaryText}
-            </span> */}
+            </span>
             <span>{ticket.id}</span>
           </div>
         </div>
