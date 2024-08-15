@@ -9,7 +9,7 @@ export const PUT = async (
   const {targetStatus, targetEpic} = await request.json();
   const ticketToUpdate = mockData.find((ticket) => ticket.id == id);
   if (!ticketToUpdate) {
-    return NextResponse.error();
+    return NextResponse.json({error: "Ticket not found"}, {status: 404});
   }
   ticketToUpdate["status"] = targetStatus;
   ticketToUpdate["epic"] = targetEpic;

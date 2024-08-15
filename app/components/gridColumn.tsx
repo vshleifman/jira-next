@@ -3,10 +3,10 @@
 import {useState} from "react";
 import Ticket from "./ticket";
 import {Data} from "../api/tickets/route";
-import {useRouter} from "next/navigation";
 import {handleMoveTicket} from "../helpers/api";
 import {useRef} from "react";
 import {useDragAndDropStore} from "../store";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 
 const GridColumn = ({
   row,
@@ -18,10 +18,27 @@ const GridColumn = ({
   tickets: Data[];
 }) => {
   const targetCell = useRef("");
-  const {sourceCellId, targetTicketId} = useDragAndDropStore();
+  const {sourceCellId, targetTicketId, setTargetTicketId, setSourceCellId} =
+    useDragAndDropStore();
   const [ticketPreview, setTicketPreview] = useState(false);
 
-  const router = useRouter();
+  const queryClient = useQueryClient();
+  const moveTicketMutation = useMutation({
+    mutationFn: async ({
+      targetTicketId,
+      targetEpic,
+      targetStatus,
+    }: {
+      targetTicketId: string;
+      targetStatus: string;
+      targetEpic: string;
+    }) => await handleMoveTicket(targetTicketId, targetStatus, targetEpic),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["tickets"],
+      });
+    },
+  });
 
   const cellId = `${row}-${col}`;
   return (
@@ -31,15 +48,16 @@ const GridColumn = ({
       onDrop={(e) => {
         const [targetEpic, targetStatus] = targetCell.current.split("-");
 
-        if (targetCell.current !== sourceCellId) {
-          handleMoveTicket(targetTicketId, targetStatus, targetEpic);
-          router.refresh();
+        if (targetTicketId && targetCell.current !== sourceCellId) {
+          moveTicketMutation.mutate({targetTicketId, targetStatus, targetEpic});
         }
         setTicketPreview(false);
+        setSourceCellId("");
+        setTargetTicketId("");
       }}
       onDragOverCapture={(e) => {
         e.preventDefault();
-        sourceCellId !== cellId && setTicketPreview(true);
+        targetTicketId && sourceCellId !== cellId && setTicketPreview(true);
         targetCell.current = e.currentTarget.id;
       }}
       onDragLeave={() => {

@@ -1,11 +1,22 @@
-import {mockData as tickets, statusList, epicsList} from "./api/mockData"
-import GridRow from "./components/gridRow"
-import {getLayout, getTickets} from "./helpers/api"
-import {useMemo} from "react"
+"use client";
+import {useQuery} from "@tanstack/react-query";
+import GridRow from "./components/gridRow";
+import {getLayout, getTickets} from "./helpers/api";
 
-export default async function Home() {
-  const {columnsOrderedList, rowsOrderedList} = await getLayout()
+export default function Home() {
+  const {data: tickets} = useQuery({
+    queryFn: async () => await getTickets(),
+    queryKey: ["tickets"],
+  });
 
+  const {data: layout, isLoading} = useQuery({
+    queryFn: async () => await getLayout(),
+    queryKey: ["layout"],
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+
+  const {columnsOrderedList, rowsOrderedList} = layout!;
   return (
     <main>
       <div className="grid grid-rows-[min-content_auto] gap-2 border border-solid border-black p-1">
@@ -31,7 +42,7 @@ export default async function Home() {
             <div key={i} className="rounded px-3 py-1">
               <GridRow
                 columnsOrderedList={columnsOrderedList}
-                tickets={tickets}
+                tickets={tickets || []}
                 row={row}
               />
             </div>
@@ -39,5 +50,5 @@ export default async function Home() {
         </div>
       </div>
     </main>
-  )
+  );
 }

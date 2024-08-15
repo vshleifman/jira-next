@@ -30,15 +30,17 @@ export const handleMoveTicket = async (
   targetStatus: string,
   targetEpic: string
 ) => {
-  console.log({ticketId, targetStatus, targetEpic});
-
-  fetch(`http://localhost:3000/api/tickets/${ticketId}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({targetStatus, targetEpic}),
-  });
+  try {
+    await fetch(`http://localhost:3000/api/tickets/${ticketId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({targetStatus, targetEpic}),
+    });
+  } catch (error) {
+    console.log({error});
+  }
 };
 
 export const handleChangeLayout = async (

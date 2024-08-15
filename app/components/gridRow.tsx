@@ -1,4 +1,3 @@
-// "use client"
 import {Data} from "../api/tickets/route";
 import GridColumn from "./gridColumn";
 import RowHeader from "./rowHeader";
@@ -13,7 +12,7 @@ const GridRow = ({
   columnsOrderedList: string[];
 }) => {
   const filterTicketsByStatus = (status: string) => {
-    return tickets.filter((ticket) => ticket.status === status);
+    return tickets?.filter((ticket) => ticket.status === status);
   };
   return (
     <div className="grid grid-rows-[min-content_auto] gap-2">
@@ -29,7 +28,7 @@ const GridRow = ({
             <GridColumn
               col={col}
               row={row}
-              tickets={filterTicketsByStatus(col)}
+              tickets={filterTicketsByStatus(col) || []}
             />
           </div>
         ))}

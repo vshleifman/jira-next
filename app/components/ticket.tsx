@@ -18,7 +18,7 @@ const Ticket = ({ticket, cellId}: {ticket?: Data; cellId: string}) => {
   return (
     <>
       {!ticket ? (
-        <div className="min-h-28 rounded-lg border border-black bg-white p-2 shadow-lg hover:bg-sky-300"></div>
+        <div className="min-h-28 rounded-lg border border-black bg-white p-2 opacity-50 shadow-lg hover:bg-sky-300"></div>
       ) : (
         <div
           id={String(ticket.id)}

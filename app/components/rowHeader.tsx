@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import {useState} from "react"
+import {useState} from "react";
 
 const RowHeader = ({row}: {row: string}) => {
-  const [draggedFrom, setDraggedFrom] = useState("")
-  const [droppedAt, setDroppedAt] = useState("")
+  const [draggedFrom, setDraggedFrom] = useState("");
+  const [droppedAt, setDroppedAt] = useState("");
   return (
     <span
       id={row}
       draggable={true}
       onDragStart={(e: React.DragEvent<HTMLDivElement>) => {
-        setDraggedFrom(e.currentTarget.id)
+        setDraggedFrom(e.currentTarget.id);
       }}
       onDragOver={(e: React.DragEvent<HTMLDivElement>) => {
-        e.preventDefault()
-        setDroppedAt(e.currentTarget.id)
+        e.preventDefault();
+        setDroppedAt(e.currentTarget.id);
       }}
       onDrop={(e: React.DragEvent<HTMLDivElement>) => {
         // console.log({draggedFrom, droppedAt})
@@ -23,7 +23,7 @@ const RowHeader = ({row}: {row: string}) => {
     >
       {row}
     </span>
-  )
-}
+  );
+};
 
-export default RowHeader
+export default RowHeader;
