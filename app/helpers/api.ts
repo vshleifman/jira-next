@@ -43,12 +43,28 @@ export const handleMoveTicket = async (
   }
 };
 
-export const handleChangeLayout = async (
-  draggedFromIndex: number,
-  droppedAtIndex: number,
-  initialList: string[]
-) => {
-  const newList = [...initialList];
-  newList.splice(draggedFromIndex, 1, initialList[droppedAtIndex]);
-  newList.splice(droppedAtIndex, 1, initialList[draggedFromIndex]);
+export const handleChangeLayout = async ({
+  direction,
+  draggedFrom,
+  droppedAt,
+}: {
+  direction: string;
+  draggedFrom: string;
+  droppedAt: string;
+}) => {
+  try {
+    await fetch("http://localhost:3000/api/layout", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        direction,
+        draggedFrom,
+        droppedAt,
+      }),
+    });
+  } catch (error) {
+    console.error(error);
+  }
 };

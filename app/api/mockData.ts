@@ -1,4 +1,4 @@
-import {Data} from "./tickets/route"
+import {Data} from "./tickets/route";
 
 export const mockData: Data[] = [
   {
@@ -81,15 +81,27 @@ export const mockData: Data[] = [
     epic: "epic3",
     status: "Up next",
   },
-]
+];
 
-export const hiddenStatuses = ["Done"]
-export const statusList = [
+export const hiddenStatuses = ["Done"];
+const unfilteredStatusList = [
   "Backlog",
   "Up next",
   "In progress",
   "On hold",
   "Done",
-].filter(status => !hiddenStatuses.includes(status))
+];
 
-export const epicsList = ["epic1", "epic2", "epic3"]
+export let statusList = unfilteredStatusList.filter(
+  (status) => !hiddenStatuses.includes(status)
+);
+
+export let epicsList = ["epic1", "epic2", "epic3"];
+
+export const updateColumns = (newOrder: string[]) => {
+  statusList = newOrder;
+};
+
+export const updateRows = (newOrder: string[]) => {
+  epicsList = newOrder;
+};
