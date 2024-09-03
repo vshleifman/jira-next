@@ -68,3 +68,31 @@ export const handleChangeLayout = async ({
     console.error(error);
   }
 };
+
+export const handleAddRow = async (rowName: string) => {
+  try {
+    await fetch("http://localhost:3000/api/layout/row", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({rowName}),
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export const handleAddColumn = async (columnName: string) => {
+  try {
+    await fetch("http://localhost:3000/api/layout/column", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({columnName}),
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};

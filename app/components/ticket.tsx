@@ -3,14 +3,10 @@
 import {useRef} from "react";
 import {Data} from "../api/tickets/route";
 import {useDragAndDropStore} from "../store";
+import {useDialog} from "../helpers/hooks/useDialog";
 
 const Ticket = ({ticket, cellId}: {ticket?: Data; cellId: string}) => {
-  const dialogRef = useRef<HTMLDialogElement>(null);
-  const toggleDialog = () => {
-    dialogRef.current?.hasAttribute("open")
-      ? dialogRef.current?.close()
-      : dialogRef.current?.showModal();
-  };
+  const {dialogRef, toggleDialog} = useDialog();
 
   const summaryText = ticket?.summary;
 
@@ -44,9 +40,7 @@ const Ticket = ({ticket, cellId}: {ticket?: Data; cellId: string}) => {
           </dialog>
           <div
             className="flex h-full flex-col justify-between gap-3"
-            onClick={() => {
-              dialogRef.current?.showModal();
-            }}
+            onClick={toggleDialog}
           >
             <span>{ticket.title}</span>
             <span>

@@ -3,6 +3,7 @@ import {useQuery} from "@tanstack/react-query";
 import GridRow from "./components/gridRow";
 import {getLayout, getTickets} from "./helpers/api";
 import ColumnHeader from "./components/columnHeader";
+import NewRow from "./components/newRow";
 
 export default function Home() {
   const {data: tickets} = useQuery({
@@ -18,6 +19,7 @@ export default function Home() {
   if (isLoading) return <div>Loading...</div>;
 
   const {columnsOrderedList, rowsOrderedList} = layout!;
+
   return (
     <main>
       <div className="grid grid-rows-[min-content_auto] gap-2 border border-solid border-black p-1">
@@ -37,6 +39,7 @@ export default function Home() {
               />
             </div>
           ))}
+          <NewRow />
         </div>
       </div>
     </main>
